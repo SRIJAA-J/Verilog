@@ -82,7 +82,6 @@ module tic_tac_toe_game(
      );    
 endmodule 
 // Position registers 
-// fpga4student.com: FPGA projects, Verilog projects, VHDL projects
 // to store player or computer positions 
 // when enabling by the FSM controller 
 module position_registers(
@@ -240,7 +239,6 @@ module position_registers(
 endmodule 
 // FSM controller to control how player and computer play the TIC TAC TOE GAME 
 // The FSM is implemented based on the designed state diagram 
-// fpga4student.com: FPGA projects, Verilog projects, VHDL projects
 module fsm_controller(
      input clock,// clock of the circuit 
      input reset,// reset 
@@ -317,7 +315,6 @@ always @(*)
 endmodule 
 // NO SPACE detector
 // to detect if no more spaces to play 
-// fpga4student.com: FPGA projects, Verilog projects, VHDL projects
 module nospace_detector(
    input [1:0] pos1,pos2,pos3,pos4,pos5,pos6,pos7,pos8,pos9, 
    output wire no_space
@@ -339,7 +336,6 @@ endmodule
 
 // Illegal move detector
 // to detect if a player plays on an exist position 
-// fpga4student.com: FPGA projects, Verilog projects, VHDL projects
 module illegal_move_detector(
    input [1:0] pos1,pos2,pos3,pos4,pos5,pos6,pos7,pos8,pos9, 
    input [8:0] PC_en, PL_en, 
@@ -374,7 +370,6 @@ assign temp22 =((((((((temp11 | temp12) | temp13) | temp14) | temp15) | temp16) 
 // output illegal move 
 assign illegal_move = temp21 | temp22 ;
 endmodule 
-// fpga4student.com: FPGA projects, Verilog projects, VHDL projects
 // To decode the position being played, a 4-to-16 decoder with high active output is needed.
 // When a button is pressed, a player will play and the position at IN [3:0] will be decoded
 // to enable writing to the corresponding registers
@@ -404,7 +399,6 @@ module position_decoder(input[3:0] in, input enable, output wire [15:0] out_en);
  endcase 
 end 
 endmodule 
-// fpga4student.com: FPGA projects, Verilog projects, VHDL projects
 // winner detector circuit 
 // to detect who the winner is 
 // We will win when we have 3 similar (x) or (O) in the following pairs: 
@@ -423,7 +417,6 @@ winner_detect_3 u8(pos3,pos5,pos6,win8,who8);// (3,5,7);
 assign winner = (((((((win1 | win2) | win3) | win4) | win5) | win6) | win7) | win8);
 assign who = (((((((who1 | who2) | who3) | who4) | who5) | who6) | who7) | who8);
 endmodule 
-// fpga4student.com: FPGA projects, Verilog projects, VHDL projects
 // winner detection for 3 positions and determine who the winner is 
 // Player: 01
 // Computer: 10
