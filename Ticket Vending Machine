@@ -1,0 +1,126 @@
+//TicketVendingMachine Code
+
+////////***********TICKET VENDING MACHINE***********////////
+
+module TicketVendingMachine(
+  input wire clk,
+  input wire rst,
+  input wire [7:0] selectedFare,
+  input wire [7:0] insertedCurrency,
+  input wire insertButton,
+  input wire cancelTransactionButton,
+  output reg ticket,
+  output reg [7:0] change,
+  output reg moneyInsufficientMessage
+);
+
+  reg [7:0] totalAmount;
+
+  always @(posedge clk or posedge rst) begin
+    if (rst) begin
+      // Reset the system
+      totalAmount <= 0;
+      ticket <= 0;
+      change <= 0;
+      moneyInsufficientMessage <= 0;
+    end else begin
+      // Transaction handling
+      if (insertButton) begin
+        totalAmount <= totalAmount + insertedCurrency;
+        if (totalAmount >= selectedFare) begin
+          ticket <= 1;
+          change <= totalAmount - selectedFare;
+        end else begin
+          moneyInsufficientMessage <= 1;
+        end
+      end else if (cancelTransactionButton) begin
+        // Refund the inserted amount
+        totalAmount <= 0;
+
+
+
+
+//TicketVendingMachine TestBench Code
+
+`timescale 1ns / 1ps
+
+////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer:
+//
+// Create Date:   21:02:06 01/30/2024
+// Design Name:   TicketVendingMachine
+// Module Name:   C:/Users/jagab/TicketVendingMachine/TicketVendingMachinetb.v
+// Project Name:  TicketVendingMachine
+// Target Device:  
+// Tool versions:  
+// Description: 
+//
+// Verilog Test Fixture created by ISE for module: TicketVendingMachine
+//
+// Dependencies:
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+////////////////////////////////////////////////////////////////////////////////
+
+module TicketVendingMachine_tb;
+  reg clk, rst, insertButton, cancelTransactionButton;
+  reg [7:0] selectedFare, insertedCurrency;
+  wire ticket, moneyInsufficientMessage;
+  wire [7:0] change;
+
+  TicketVendingMachine uut (
+    .clk(clk),
+    .rst(rst),
+    .selectedFare(selectedFare),
+    .insertedCurrency(insertedCurrency),
+    .insertButton(insertButton),
+    .cancelTransactionButton(cancelTransactionButton),
+    .ticket(ticket),
+    .change(change),
+    .moneyInsufficientMessage(moneyInsufficientMessage)
+  );
+
+  initial begin
+    // Initialize inputs
+    clk = 0;
+    rst = 1;
+    insertButton = 0;
+    cancelTransactionButton = 0;
+    selectedFare = 10; // Set your desired destination fare
+    insertedCurrency = 0;
+
+    // Apply reset
+    rst = 0;
+    #10 rst = 1;
+
+    // Test scenario 1: Sufficient money
+    insertedCurrency = 15;
+    insertButton = 1;
+    #20 insertButton = 0;
+
+    // Test scenario 2: Insufficient money
+    insertedCurrency = 5;
+    insertButton = 1;
+    #20 insertButton = 0;
+
+    // Test scenario 3: Cancel transaction
+    insertedCurrency = 8;
+    insertButton = 1;
+    #10 cancelTransactionButton = 1;
+    #10 cancelTransactionButton = 0;
+    #20 insertButton = 0;
+
+    // Add more test scenarios as needed
+
+    // End simulation
+    #50 $finish;
+  end
+
+  always #5 clk =~clk; // Toggle the clock every 5 time units
+endmodule
+ 
+
